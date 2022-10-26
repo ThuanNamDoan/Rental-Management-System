@@ -1,0 +1,31 @@
+USE [QuanLyThueBanNha]
+GO
+/****** Object:  StoredProcedure [dbo].[CapNhatLuongNhanVien]    Script Date: 11/05/2021 10:28:07 CH ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[CapNhatLuongNhanVien]
+	@maNhanVien char(10),
+	@luongThem money
+as
+begin tran
+	
+	declare @luong money
+	--lấy mức lương của nhân viên
+	--set @luong = (Select Luong from NhanVien with (updlock) where MaNhanVien = @maNhanVien)
+	set @luong = (Select Luong from NhanVien where MaNhanVien = @maNhanVien)
+
+	--delay
+	--Waitfor Delay '00:00:5'
+
+	--tính mức lương sau khi tăng thêm
+	set @luong = @luong + @luongThem
+
+
+	--update mức lương hiện tại
+	update NhanVien set  Luong = @luong where MaNhanVien = @maNhanVien
+
+	print(@luong)
+
+commit tran

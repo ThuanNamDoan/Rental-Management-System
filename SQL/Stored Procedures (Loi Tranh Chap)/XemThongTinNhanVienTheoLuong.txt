@@ -1,0 +1,23 @@
+USE [QuanLyThueBanNha]
+GO
+/****** Object:  StoredProcedure [dbo].[XemThongTinNhanVienTheoLuong]    Script Date: 11/05/2021 10:31:04 CH ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[XemThongTinNhanVienTheoLuong]
+	@mucLuong money,
+	@soLuong int out
+as
+
+begin tran
+	SET TRAN ISOLATION LEVEL Serializable
+	--đếm số lượng nhân viên
+	set @soLuong = (select count(MaNhanVien) from NhanVien where NhanVien.Luong > @mucLuong)
+
+	Waitfor Delay '00:00:5'
+
+	--hiển thị thông tin nhân viên
+	select * from NhanVien where NhanVien.Luong > @mucLuong
+
+commit tran

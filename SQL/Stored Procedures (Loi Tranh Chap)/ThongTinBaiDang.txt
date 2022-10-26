@@ -1,0 +1,19 @@
+USE [QuanLyThueBanNha]
+GO
+/****** Object:  StoredProcedure [dbo].[ThongTinBaiDang]    Script Date: 11/05/2021 10:29:20 CH ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER procedure [dbo].[ThongTinBaiDang]
+	@soLuong int out
+as
+begin tran
+	--đếm số lượng chi nhánh
+	set @soLuong = (select count(MaBaiDang) from BaiDang)
+
+	--hiển thị thông tin chi nhánh
+	select * from BaiDang
+
+commit tran

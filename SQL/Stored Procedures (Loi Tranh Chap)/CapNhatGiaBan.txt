@@ -1,0 +1,33 @@
+USE [QuanLyThueBanNha]
+GO
+/****** Object:  StoredProcedure [dbo].[CapNhatGiaBan]    Script Date: 11/05/2021 10:27:36 CH ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER procedure [dbo].[CapNhatGiaBan]
+	@maNha char(10),
+	@giaThem money
+as
+begin tran
+	
+	-- select lấy mã giá
+	declare @maGia char(10)
+	set @maGia = (Select MaGia from Nha with (updlock) where MaNha = @maNha)
+	--set @maGia = (Select MaGia from Nha where MaNha = @maNha)
+
+	--select lấy giá bán của nhà
+	declare @gia money
+	set @gia = (Select GiaBan from Gia where MaGia = @maGia)
+
+	--Waitfor Delay '00:00:5'
+
+	--tính giá cập nhật
+	set @gia = @gia + @giaThem
+
+	--update thông tin giá bán
+	update Gia set  GiaBan = @gia where MaGia = @maGia
+
+	print(@gia)
+
+commit tran

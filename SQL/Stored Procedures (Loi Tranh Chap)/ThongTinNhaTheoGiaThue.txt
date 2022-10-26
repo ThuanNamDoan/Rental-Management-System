@@ -1,0 +1,23 @@
+USE [QuanLyThueBanNha]
+GO
+/****** Object:  StoredProcedure [dbo].[ThongTinNhaTheoGiaThue]    Script Date: 11/05/2021 10:30:58 CH ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER procedure [dbo].[ThongTinNhaTheoGiaThue]
+	@giaThue money,
+	@soLuong int out
+as
+begin tran
+	--SET TRAN ISOLATION LEVEL Serializable
+	--đếm số lượng nhà có giá bán < @giaBan
+	set @soLuong = (select count(MaNha) from Nha join Gia on Nha.MaGia = Gia.MaGia where Gia.GiaThue < @giaThue)
+	
+	Waitfor Delay '00:00:5'
+	
+	--hiển thị thông tin nhà hợp lệ
+	select * from Nha join Gia on Nha.MaGia = Gia.MaGia where Gia.GiaThue < @giaThue
+
+commit tran
